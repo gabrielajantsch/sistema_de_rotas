@@ -1,22 +1,13 @@
-/* Integrantes: NOME 1, NOME 2, NOME 3, NOME 4, NOME 5 */
-/*
- * Avaliacao N3 - Sistema de rotas do campus
- * Disciplina: Estrutura de Dados
- *
- * Grafo ponderado e nao direcionado (matriz de adjacencia).
- * Algoritmos: Dijkstra (menor rota) e Floyd-Warshall (alcancabilidade).
- */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-#define N 5            /* numero de predios (vertices) */
-#define INF 1000000    /* representa "sem caminho" */
+#define N 5            
+#define INF 1000000    
 #define TAM_LINHA 100
 
-/* Indices dos predios */
 #define BLOCO_A      0
 #define BLOCO_B      1
 #define BIBLIOTECA   2
@@ -27,21 +18,16 @@ static const char *nomes[N] = {
     "Bloco A", "Bloco B", "Biblioteca", "Refeitorio", "Laboratorio"
 };
 
-/* Matriz de adjacencia: 0 = sem aresta, >0 = distancia em metros */
 static int grafo[N][N];
 
-/* Matriz de distancias minimas (Floyd-Warshall) e de alcancabilidade */
 static int distFW[N][N];
 static int alcanca[N][N];
 
-/* ------------------------------------------------------------------ */
-/* Construcao do grafo                                                 */
-/* ------------------------------------------------------------------ */
 
 static void adicionarAresta(int a, int b, int metros)
 {
     grafo[a][b] = metros;
-    grafo[b][a] = metros;   /* nao direcionado */
+    grafo[b][a] = metros;   
 }
 
 static void inicializarGrafo(void)
@@ -58,10 +44,6 @@ static void inicializarGrafo(void)
     adicionarAresta(REFEITORIO, BIBLIOTECA,  280);
     adicionarAresta(BIBLIOTECA, BLOCO_A,     160);
 }
-
-/* ------------------------------------------------------------------ */
-/* Entrada de dados                                                    */
-/* ------------------------------------------------------------------ */
 
 static void lerLinha(char *buf, int tam)
 {
@@ -110,7 +92,6 @@ static void listarPredios(void)
         printf("  %d - %s\n", i + 1, nomes[i]);
 }
 
-/* Le um predio pelo numero (1..N) ou pelo nome. Retorna o indice 0..N-1 */
 static int lerPredio(const char *mensagem)
 {
     char buf[TAM_LINHA];
@@ -131,7 +112,6 @@ static int lerPredio(const char *mensagem)
             for (i = 0; i < N; i++)
                 if (igualIgnorandoCaso(buf, nomes[i]))
                     return i;
-            /* aceita tambem com acento */
             if (igualIgnorandoCaso(buf, "Refeit\xC3\xB3rio") ||
                 igualIgnorandoCaso(buf, "Refeit\xF3rio"))
                 return REFEITORIO;
@@ -143,9 +123,6 @@ static int lerPredio(const char *mensagem)
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* Dijkstra                                                            */
-/* ------------------------------------------------------------------ */
 
 static void dijkstra(int origem, int destino)
 {
@@ -161,7 +138,6 @@ static void dijkstra(int origem, int destino)
     dist[origem] = 0;
 
     for (k = 0; k < N; k++) {
-        /* escolhe o vertice nao visitado com menor distancia */
         u = -1;
         menor = INF;
         for (i = 0; i < N; i++) {
@@ -171,10 +147,9 @@ static void dijkstra(int origem, int destino)
             }
         }
         if (u == -1)
-            break;   /* o restante e inalcancavel */
+            break;  
         visitado[u] = 1;
 
-        /* relaxa as arestas de u */
         for (v = 0; v < N; v++) {
             if (grafo[u][v] > 0 && !visitado[v] &&
                 dist[u] + grafo[u][v] < dist[v]) {
@@ -190,7 +165,6 @@ static void dijkstra(int origem, int destino)
         return;
     }
 
-    /* reconstroi o caminho de tras para frente */
     tam = 0;
     for (v = destino; v != -1; v = ant[v])
         caminho[tam++] = v;
@@ -204,9 +178,6 @@ static void dijkstra(int origem, int destino)
     printf("\nDistancia total: %d m\n", dist[destino]);
 }
 
-/* ------------------------------------------------------------------ */
-/* Floyd-Warshall                                                      */
-/* ------------------------------------------------------------------ */
 
 static void floydWarshall(void)
 {
@@ -230,17 +201,12 @@ static void floydWarshall(void)
                     distFW[i][k] + distFW[k][j] < distFW[i][j])
                     distFW[i][j] = distFW[i][k] + distFW[k][j];
 
-    /* matriz de alcancabilidade derivada das distancias */
     for (i = 0; i < N; i++)
         for (j = 0; j < N; j++)
             alcanca[i][j] = (distFW[i][j] != INF) ? 1 : 0;
 }
 
-/* ------------------------------------------------------------------ */
-/* Funcionalidades do menu                                             */
-/* ------------------------------------------------------------------ */
 
-/* RF01 */
 static void exibirMapa(void)
 {
     int i, j;
@@ -254,7 +220,7 @@ static void exibirMapa(void)
     printf("============================\n");
 }
 
-/* RF02 */
+
 static void menorRota(void)
 {
     int origem, destino;
@@ -265,7 +231,7 @@ static void menorRota(void)
     dijkstra(origem, destino);
 }
 
-/* RF03 */
+
 static void verificarConexao(void)
 {
     int a, b;
@@ -280,7 +246,6 @@ static void verificarConexao(void)
         printf("\nNao existe caminho entre %s e %s.\n", nomes[a], nomes[b]);
 }
 
-/* RF04 */
 static void exibirMatrizAlcancabilidade(void)
 {
     int i, j;
