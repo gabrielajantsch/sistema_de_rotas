@@ -1,11 +1,13 @@
+// Integrantes: Gabriela Jantsch, Gabriela Vitoria Guths, Julia Gorges/
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-#define N 5            
-#define INF 1000000    
+#define N 5           
+#define INF 1000000   
 #define TAM_LINHA 100
 
 #define BLOCO_A      0
@@ -27,7 +29,7 @@ static int alcanca[N][N];
 static void adicionarAresta(int a, int b, int metros)
 {
     grafo[a][b] = metros;
-    grafo[b][a] = metros;   
+    grafo[b][a] = metros;
 }
 
 static void inicializarGrafo(void)
@@ -38,11 +40,11 @@ static void inicializarGrafo(void)
         for (j = 0; j < N; j++)
             grafo[i][j] = 0;
 
-    adicionarAresta(BLOCO_B,    LABORATORIO, 240);
-    adicionarAresta(LABORATORIO, BLOCO_A,    210);
-    adicionarAresta(BLOCO_A,    REFEITORIO,  190);
-    adicionarAresta(REFEITORIO, BIBLIOTECA,  280);
-    adicionarAresta(BIBLIOTECA, BLOCO_A,     160);
+    adicionarAresta(BLOCO_B,     LABORATORIO, 240);
+    adicionarAresta(LABORATORIO, BLOCO_A,     210);
+    adicionarAresta(BLOCO_A,     REFEITORIO,  190);
+    adicionarAresta(REFEITORIO,  BIBLIOTECA,  280);
+    adicionarAresta(BIBLIOTECA,  BLOCO_A,     160);
 }
 
 static void lerLinha(char *buf, int tam)
@@ -112,12 +114,6 @@ static int lerPredio(const char *mensagem)
             for (i = 0; i < N; i++)
                 if (igualIgnorandoCaso(buf, nomes[i]))
                     return i;
-            if (igualIgnorandoCaso(buf, "Refeit\xC3\xB3rio") ||
-                igualIgnorandoCaso(buf, "Refeit\xF3rio"))
-                return REFEITORIO;
-            if (igualIgnorandoCaso(buf, "Laborat\xC3\xB3rio") ||
-                igualIgnorandoCaso(buf, "Laborat\xF3rio"))
-                return LABORATORIO;
         }
         printf("Predio invalido! Digite o numero (1-%d) ou o nome.\n", N);
     }
@@ -126,7 +122,9 @@ static int lerPredio(const char *mensagem)
 
 static void dijkstra(int origem, int destino)
 {
-    int dist[N], ant[N], visitado[N];
+    int dist[N];       
+    int ant[N];        
+    int visitado[N];   
     int caminho[N];
     int i, k, u, v, menor, tam;
 
@@ -213,7 +211,7 @@ static void exibirMapa(void)
 
     printf("\n====== MAPA DO CAMPUS ======\n");
     for (i = 0; i < N; i++)
-        for (j = i + 1; j < N; j++)
+        for (j = i + 1; j < N; j++)  
             if (grafo[i][j] > 0)
                 printf("%s <-> %s : %d m\n",
                        nomes[i], nomes[j], grafo[i][j]);
@@ -287,7 +285,7 @@ int main(void)
     int opcao;
 
     inicializarGrafo();
-    floydWarshall();
+    floydWarshall();   
 
     do {
         exibirMenu();
