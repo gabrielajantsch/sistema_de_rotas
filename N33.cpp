@@ -1,5 +1,4 @@
-// Integrantes: Gabriela Jantsch, Gabriela Vitoria Guths, Julia Gorges/
-
+// Integrantes: Gabriela Jantsch, Gabriela Vitoria Guths, Julia Gorges//
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +6,7 @@
 #include <ctype.h>
 
 #define N 5           
-#define INF 1000000   
+#define INF 1000000    
 #define TAM_LINHA 100
 
 #define BLOCO_A      0
@@ -23,6 +22,7 @@ static const char *nomes[N] = {
 static int grafo[N][N];
 
 static int distFW[N][N];
+
 static int alcanca[N][N];
 
 
@@ -93,6 +93,7 @@ static void listarPredios(void)
     for (i = 0; i < N; i++)
         printf("  %d - %s\n", i + 1, nomes[i]);
 }
+
 
 static int lerPredio(const char *mensagem)
 {
@@ -211,7 +212,7 @@ static void exibirMapa(void)
 
     printf("\n====== MAPA DO CAMPUS ======\n");
     for (i = 0; i < N; i++)
-        for (j = i + 1; j < N; j++)  
+        for (j = i + 1; j < N; j++)   
             if (grafo[i][j] > 0)
                 printf("%s <-> %s : %d m\n",
                        nomes[i], nomes[j], grafo[i][j]);
@@ -285,7 +286,7 @@ int main(void)
     int opcao;
 
     inicializarGrafo();
-    floydWarshall();   
+    floydWarshall();  
 
     do {
         exibirMenu();
